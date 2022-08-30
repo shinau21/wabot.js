@@ -85,8 +85,8 @@ client.on('message_create', async(message) => {
             });
 
         } else if (message.body.startsWith('!bc')) {
-            let splt = message.body.split('.')
-            let file = message.body.split(' ')[1];
+            let splt = message.body.split(' ')
+            let file = splt[1];
             let messageIndex = message.body.indexOf(file) + file.length;
             let pesan = message.body.slice(messageIndex, message.body.length);
             fs.readFile("./upload/document/" + file, function(err,data) {
