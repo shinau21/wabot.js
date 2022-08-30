@@ -7,7 +7,8 @@ const client = new Client({
 });
  
 client.on("qr", (qr) => {
-  qrcode.generate(qr, { small: true });
+    console.log("Scan QRCODE")
+    qrcode.generate(qr, { small: true });
 });
 
 client.on("ready", () => {
@@ -38,14 +39,10 @@ client.on('message_create', async(message) => {
                 try{
                     const members = chat.participants
                     for (let member of members) {
-                        try{
-                            if(member.id._serialized != member.owner._serialized){
-                                chat.removeParticipants([member.id._serialized])
-                            }
-                        } catch(e) {
-                            console.log(e)
+                        if(member.id._serialized != member.owner._serialized){
+                            chat.removeParticipants([member.id._serialized])
                         }
-                    }    
+                    }
                 } catch(e){
                     client.sendMessage(message.from,"Kamu bukan Admin")
                 }
