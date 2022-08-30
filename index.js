@@ -3,7 +3,7 @@ const qrcode = require("qrcode-terminal");
 const fs =  require("fs")
  
 const client = new Client({
-  authStrategy: new LocalAuth(),
+    authStrategy: new LocalAuth({ clientId: "wabot" }),
 });
  
 client.on("qr", (qr) => {
@@ -63,6 +63,22 @@ client.on('message_create', async(message) => {
                 console.log(members)
                 client.createGroup(group,members)
             });
+        } else if (msg.body.startsWith('!bc')) {
+            let file = msg.body.split(' ')[1];
+            let messageIndex = msg.body.indexOf(file) + file.length;
+            let message = msg.body.slice(messageIndex, msg.body.length);
+            fs.readFile("./upload/document/" + file, function(err,data) {
+                content = data.toString();
+               // console.log(content);
+                let numbers = content.split(',');
+                console.log(numbers);
+                for (let x in numbers){
+                    //console.log(numbers);
+                    //console.log(message);
+                    number = numbers[x].includes('@c.us') ? numbers[x] : `${numbers[x]}@c.us`;
+                    client.sendMessage(number, message);    
+                }
+            })
         }
     }
 })
