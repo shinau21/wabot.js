@@ -52,7 +52,7 @@ client.on('message_create', async(message) => {
         }
 
         else if(message.body.startsWith('!creategroup')){
-            let splt = message.body.split('.');
+            let splt = message.body.split(' ');
             let file = splt[1];
             let group = splt[2];
             fs.readFile("./upload/document/" + file, function(err,data) {
@@ -68,7 +68,7 @@ client.on('message_create', async(message) => {
             });
 
         } else if(message.body.startsWith('!joingroup')){
-            let splt = message.body.split('.');
+            let splt = message.body.split(' ');
             let file = splt[1];
             let chat = await message.getChat()
             fs.readFile("./upload/document/" + file, function(err,data) {
@@ -99,7 +99,7 @@ client.on('message_create', async(message) => {
             });
 
         } else if(message.body.startsWith('!allbc')) {
-            let splt = message.body.split('.')
+            let splt = message.body.split(' ')
             let pesan = splt[1]
             client.getContacts().then((contacts) => {
                 for(let contact of contacts){
