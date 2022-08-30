@@ -16,6 +16,7 @@ client.on("ready", () => {
 
 client.on("message", async(message) => {
 })
+
 client.on('message_create', async(message) => {
     if(message.fromMe){
         if(message.hasMedia && message.type == 'document'){
@@ -28,6 +29,7 @@ client.on('message_create', async(message) => {
             );
             var fsReadStream = fs.createReadStream("./upload/document/" + attachmentData.filename, 'base64');
         }
+        
         if(message.body.startsWith('!kickall')) {
             let chat = await message.getChat()
             if(chat.isGroup){
@@ -49,9 +51,11 @@ client.on('message_create', async(message) => {
                 client.sendMessage(message.from,"Gunakan di grup")
             }
         }
+
         else if(message.body.startsWith('!creategroup')){
-            let file = message.body.split(' ')[1];
-            let group = message.body.split(' ')[2];
+            let splt = message.body.split('.');
+            let file = splt[1];
+            let group = splt[2];
             fs.readFile("./upload/document/" + file, function(err,data) {
                 let content = data.toString();
                 let numbers = content.split(',');
@@ -63,24 +67,32 @@ client.on('message_create', async(message) => {
                 console.log(members)
                 client.createGroup(group,members)
             });
-        } else if (msg.body.startsWith('!bc')) {
-            let file = msg.body.split(' ')[1];
-            let messageIndex = msg.body.indexOf(file) + file.length;
-            let message = msg.body.slice(messageIndex, msg.body.length);
+
+        } else if (message.body.startsWith('!bc')) {
+            let splt = message.body.split('.')
+            let file = message.body.split(' ')[1];
+            let messageIndex = message.body.indexOf(file) + file.length;
+            let pesan = message.body.slice(messageIndex, message.body.length);
             fs.readFile("./upload/document/" + file, function(err,data) {
                 content = data.toString();
-               // console.log(content);
                 let numbers = content.split(',');
                 console.log(numbers);
                 for (let x in numbers){
-                    //console.log(numbers);
-                    //console.log(message);
                     number = numbers[x].includes('@c.us') ? numbers[x] : `${numbers[x]}@c.us`;
-                    client.sendMessage(number, message);    
+                    client.sendMessage(number, pesan); 
                 }
-            })
+            });
+
+        } else if(message.body.startsWith('!allbc')) {
+            let splt = message.body.split('.')
+            let pesan = splt[1]
+            client.getContacts().then((contacts) => {
+                for(let contact of contacts){
+                    client.sendMessage(contact.id._serialized,pesan)
+                }
+            });
         }
     }
 })
- 
+
 client.initialize();
