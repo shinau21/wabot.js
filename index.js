@@ -9,8 +9,6 @@ client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
 });
 
-const myGroupName = "MetroPay SMK";
-
 client.on("ready", () => {
     console.log("Client Ready")
 })
