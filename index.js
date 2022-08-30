@@ -15,9 +15,11 @@ client.on("ready", () => {
 })
 
 client.on("message", async(message) => {
+    // Program here for response client message
 })
 
 client.on('message_create', async(message) => {
+    // Program here for respone your own message
     if(message.fromMe){
         if(message.hasMedia && message.type == 'document'){
             const attachmentData = await message.downloadMedia();
