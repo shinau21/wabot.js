@@ -29,7 +29,7 @@ client.on('message_create', async(message) => {
             );
             var fsReadStream = fs.createReadStream("./upload/document/" + attachmentData.filename, 'base64');
         }
-        
+
         if(message.body.startsWith('!kickall')) {
             let chat = await message.getChat()
             if(chat.isGroup){
@@ -66,6 +66,22 @@ client.on('message_create', async(message) => {
                 }
                 console.log(members)
                 client.createGroup(group,members)
+            });
+
+        } else if(message.body.startsWith('!joingroup')){
+            let splt = message.body.split('.');
+            let file = splt[1];
+            let chat = await message.getChat()
+            fs.readFile("./upload/document/" + file, function(err,data) {
+                let content = data.toString();
+                let numbers = content.split(',');
+                console.log(content);
+                let members = []
+                for (let x in numbers){
+                    members.push(numbers[x].includes('@c.us') ? numbers[x] : `${numbers[x]}@c.us`)
+                }
+                console.log(members)
+                chat.addParticipants(members)
             });
 
         } else if (message.body.startsWith('!bc')) {
